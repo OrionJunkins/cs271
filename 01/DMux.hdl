@@ -14,8 +14,10 @@ CHIP DMux {
     OUT a, b;
 
     PARTS:
+    //Negate sel
     Not(in=sel, out=notsel);
+
+    //And with sel/notsel respectively and output to a, b
     And(a=in, b=notsel, out=a);
     And(a=in, b=sel, out=b);
-
 }

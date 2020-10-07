@@ -16,7 +16,10 @@ CHIP Mux4Way16 {
     OUT out[16];
 
     PARTS:
+    //Use Mux16 with sel[1] to select between a,c and b,d separately 
     Mux16(a=a, b=c, sel=sel[1], out=acMux16sel1);
     Mux16(a=b, b=d, sel=sel[1], out=bdMux16sel1);
+
+    //Now use another Mux 16 with sel[0] to distinguish between the two results
     Mux16(a=acMux16sel1, b=bdMux16sel1, sel=sel[0],out=out);
 }

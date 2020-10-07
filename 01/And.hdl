@@ -14,6 +14,9 @@ CHIP And {
     OUT out;
 
     PARTS:
+    //Take the Nand of both inputs
     Nand(a=a, b=b, out=aNandb);
+
+    //Negate the Nand and output the results (not(notAnd)) => And
     Not(in=aNandb, out=out);
 }

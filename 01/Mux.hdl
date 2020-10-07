@@ -14,8 +14,13 @@ CHIP Mux {
     OUT out;
 
     PARTS:
+    //Negate selection bit
     Not(in=sel, out=notSel);
+
+    //Isolate a == 1 and b == 1 cases by And-ing with sel
     And(a=a, b=notSel, out=aAndnotSel);
     And(a=b, b=sel, out=bAndSel);
+
+    //Return whichever combination is true
     Or(a=aAndnotSel, b=bAndSel, out=out);
 }

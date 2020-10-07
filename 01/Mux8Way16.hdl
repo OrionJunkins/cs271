@@ -22,10 +22,12 @@ CHIP Mux8Way16 {
     OUT out[16];
 
     PARTS:
-    Mux16(a=a, b=e, out=ae);
-    Mux16(a=b, b=f, out=bf);
-    Mux16(a=c, b=g, out=cg);
-    Mux16(a=d, b=h, out=dh);
+    //Use Mux16 with sel[2] to seperate a-d from e-h
+    Mux16(a=a, b=e, sel=sel[2], out=ae);
+    Mux16(a=b, b=f, sel=sel[2], out=bf);
+    Mux16(a=c, b=g, sel=sel[2], out=cg);
+    Mux16(a=d, b=h, sel=sel[2], out=dh);
 
-    Mux4way16(a=ae, b=bf, c=cg, d=dh, out=out)
+    //Now use Mux4Way16 with sel[0..1] to find the correct out location of the remaining 4 possible
+    Mux4Way16(a=ae, b=bf, c=cg, d=dh, sel=sel[0..1], out=out);
 }

@@ -16,7 +16,10 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
+    //DMux about sel[2] to separate a-d from e-h
     DMux(in=in, sel=sel[2], a=sel2is0, b=sel2is1);
+
+    //DMux4Way both results about sel[0..1]
     DMux4Way(in=sel2is0, sel=sel[0..1], a=a, b=b, c=c, d=d);
     DMux4Way(in=sel2is1, sel=sel[0..1], a=e, b=f, c=g, d=h);
 }
