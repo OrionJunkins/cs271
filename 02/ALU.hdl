@@ -42,5 +42,42 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    //If zx and/or zy is 1, set x and/or y to 0 respectively
+    Mux16(a=x, b[0..15]=false, sel=zx, out=xOr0);
+    Mux16(a=y, b[0..15]=false, sel=zy, out=yOr0);
+
+    //Negate both xOr0 and yOr0
+    Not16(in=xOr0, out=notxOr0);
+    Not16(in=yOr0, out=notyOr0);
+
+    //Use nx and ny to choose between xOr0/notxOr0 and yOr0/notyOr0 respectively
+    Mux16(a=xOr0, b=notxOr0, sel=nx, out=xFinal);
+    Mux16(a=yOr0, b=notyOr0, sel=ny, out=yFinal);
+
+    //Find both the Add16 and And16 of xFinal and yFinal
+    Add16(a=xFinal, b=yFinal, out=addOut);
+    And16(a=xFinal, b=yFinal, out=andOut);
+
+    //Use a Mux16 with sel=f to select desired out
+    Mux16(a=andOut, b=addOut, sel=f, out=combinedOut);
+
+    //Negate combinedOut
+    Not16(in=combinedOut, out=notcombinedOut);
+
+    //Select the final output based on no
+    Mux16(a=combinedOut, b=notcombinedOut, sel=no, out=finalOut);
+
+    //Set zr
+    Or16Way(in=finalOut, out=zr);  //outOr==1 iff out!=0
+
+    //Set ng
+    And16(a[0..15]=true, b=finalOut, out[0..14]=disregard, out[15]=ng);
+
+    And16(a[0..15]=true, b=finalOut, out=out);
+
+
+
+
+
+
 }
