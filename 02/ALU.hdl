@@ -54,7 +54,7 @@ CHIP ALU {
     Mux16(a=xOr0, b=notxOr0, sel=nx, out=xFinal);
     Mux16(a=yOr0, b=notyOr0, sel=ny, out=yFinal);
 
-    //Find both the Add16 and And16 of xFinal and yFinal
+    //Find both the Add16 & And16 of xFinal and yFinal
     Add16(a=xFinal, b=yFinal, out=addOut);
     And16(a=xFinal, b=yFinal, out=andOut);
 
@@ -68,11 +68,13 @@ CHIP ALU {
     Mux16(a=combinedOut, b=notcombinedOut, sel=no, out=finalOut);
 
     //Set zr
-    Or16Way(in=finalOut, out=zr);  //outOr==1 iff out!=0
+    Or16Way(in=finalOut, out=outOr);  //outOr==1 iff out!=0
+    Not(in=outOr, out=zr);
 
     //Set ng
     And16(a[0..15]=true, b=finalOut, out[0..14]=disregard, out[15]=ng);
 
+    //Send finalOut to out
     And16(a[0..15]=true, b=finalOut, out=out);
 
 
