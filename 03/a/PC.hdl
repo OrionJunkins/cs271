@@ -16,13 +16,21 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    Inc16(in=regOut, out=incRegOut); //inc val
+    //Increment and store regOut
+    Inc16(in=regOut, out=incRegOut); 
+
+    //If inc==1, select the incremented version
     Mux16(a=regOut, b=incRegOut, sel=inc, out=regOrIncReg);
+
+    //If load==1, select the in val
     Mux16(a=regOrIncReg, b=in, sel=load, out=regOrIn);
+
+    //If reset==1, select a 16 bit 0 value
     Mux16(a=regOrIn, b[0..15]=false, sel=reset, out=regOrInOr0);
     
-    
+    //Input the selected value into a register to store
     Register(in=regOrInOr0, load=true, out=regOut);
 
+    //Send regOut to out
     And16(a=regOut, b[0..15]=true, out=out);
 }

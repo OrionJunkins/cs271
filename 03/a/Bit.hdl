@@ -14,8 +14,12 @@ CHIP Bit {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    //Based on load, select either the prior DFFout or the given in
     Mux(a=DFFout, b=in, sel=load, out=DFFin);
+
+    //Put the selected value into a DFF
     DFF(in=DFFin, out=DFFout);
+
+    //Send the DFFout to out
     And(a=true, b=DFFout, out=out);
 }

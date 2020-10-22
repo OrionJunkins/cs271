@@ -15,10 +15,10 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
-
+    //Use DMux to assign the given load bit to the lx value specified by address
     DMux8Way(in=load, sel=address, a=l0, b=l1, c=l2, d=l3, e=l4, f=l5, g=l6, h=l7);
 
+    //Create 8 registers
     Register(in=in, load=l0, out=reg0);
     Register(in=in, load=l1, out=reg1);
     Register(in=in, load=l2, out=reg2);
@@ -28,5 +28,6 @@ CHIP RAM8 {
     Register(in=in, load=l6, out=reg6);
     Register(in=in, load=l7, out=reg7);
 
+    //Use Mux8Way16 to output the value from the correct register
     Mux8Way16(a=reg0, b=reg1, c=reg2, d=reg3, e=reg4, f=reg5, g=reg6, h=reg7, sel=address, out=out);
 }
