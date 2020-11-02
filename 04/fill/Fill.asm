@@ -11,59 +11,59 @@
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
 
-// Put your code here.
-
+//Loop until a key is pressed
 (LOOP)
 @KBD
 D=M
 @LOOP
 D;JEQ //if KBD == 0 Goto loop
 
-
+//Create a counter
 @i
 M=0 //set i = 0
 
+//Set n = KBD address
 @KBD
 D=A 
 @n 
-M=D  // Set n = KBD 
+M=D  
 
+//Iterate 16 bits at a time until screen is full
 (FILL)
 @i
 D=M
 @SCREEN 
 D=D+A
 @KBD
-D = A - D
+D = A - D      //D = address of KBD - (address of SCREEN + I)
 @STAYFILLED
-D;JLE
-
+D;JLE          //if D <= 0, screen is full so jump to STAYFILLED
 
 @SCREEN
 D=A
 @i 
-A = D + M  //Set A reg = screen + i
-M = -1 // Value @a = 11111...11
+A = D + M     //Set A reg = screen + i
+M = -1        // Value @a = 11111...11, fill that 16 bit segment
 
 @i
-M=M+1 //i++
+M=M+1         //i++  
 
 @FILL
-0;JMP
+0;JMP         //Jump back up to FILL to fill next segment
 
 
+//Screen is now full, wait until key is no longer pressed before proceeding
 (STAYFILLED)
 @KBD 
 D=M
 @STAYFILLED
-D; JNE  //if KBD != 0 Goto STAYFILLED
+D; JNE       //if KBD != 0 Goto STAYFILLED
 
-
-//goto Loop
-
+//Reset i counter to 0
 @i
-M=0 //reset i = 0
+M=0 
 
+//Use same logic as above to clear screen
 (CLEAR)
 @i
 D=M
@@ -72,20 +72,19 @@ D=D+A
 @KBD
 D = A - D
 @LOOP
-D;JLE
-
+D;JLE       //Jump back to top if screen is full
 
 @SCREEN
 D=A
 @i 
-A = D + M  //Set A reg = screen + i
-M = 0 // Value @a = 0000...00
+A = D + M  
+M = 0     // Value @a = 0000...00, clear segment
 
 @i
-M=M+1 //i++
+M=M+1
 
 @CLEAR
-0;JMP
+0;JMP 
 
 (END)
 @END
