@@ -18,7 +18,7 @@ D=M
 @STOP
 D;JEQ
 
-//Check R1 not 0
+//Check R1 not 0`
 @R1
 D=M
 @STOP
