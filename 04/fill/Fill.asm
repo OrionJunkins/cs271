@@ -12,21 +12,15 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 //Loop until a key is pressed
-(LOOP)
+(STAYCLEAR)
 @KBD
 D=M
-@LOOP
+@STAYCLEAR
 D;JEQ //if KBD == 0 Goto loop
 
 //Create a counter
 @i
 M=0 //set i = 0
-
-//Set n = KBD address
-@KBD
-D=A 
-@n 
-M=D  
 
 //Iterate 16 bits at a time until screen is full
 (FILL)
@@ -63,7 +57,7 @@ D; JNE       //if KBD != 0 Goto STAYFILLED
 @i
 M=0 
 
-//Use same logic as above to clear screen
+//Use same logic as fill to clear screen
 (CLEAR)
 @i
 D=M
@@ -71,13 +65,13 @@ D=M
 D=D+A
 @KBD
 D = A - D
-@LOOP
+@STAYCLEAR
 D;JLE       //Jump back to top if screen is full
 
 @SCREEN
 D=A
 @i 
-A = D + M  
+A = D + M 
 M = 0     // Value @a = 0000...00, clear segment
 
 @i
