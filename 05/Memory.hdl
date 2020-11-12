@@ -27,5 +27,15 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    //Use a DMux to analyze the MSB of address to determine if RAM or IO should be probed
+    DMux(in=load, sel=address[14], a=RAMLoad, b=IO);
+    
+
+    RAM16K(in=in, load=RAMLoad, address=address[0..13], out=RAMOut);
+    
+    Screen(in=in, load=IO, address=address[0..12], out=SCREENOut);
+
+    Keyboard(out=KBDOut);
+
+    Mux4Way16(a=RAMOut, b=RAMOut, c=SCREENOut, d=KBDOut, sel=address[13..14], out=out);
 }

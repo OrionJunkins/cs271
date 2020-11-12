@@ -24,6 +24,6 @@ CHIP RAM16K {
     RAM4K(in=in, load=l2, address=address[0..11], out=ram2);
     RAM4K(in=in, load=l3, address=address[0..11], out=ram3);
 
-    //Use Mux8Way16 to output the correct value 
+    //Use Mux4Way16 to output the correct  
     Mux4Way16(a=ram0, b=ram1, c=ram2, d=ram3, sel=address[12..13], out=out);
 }
