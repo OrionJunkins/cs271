@@ -68,12 +68,11 @@ CHIP CPU {
     //A or C instruction? - send instruction or ALUOut (respectively) to A Reg 
     Mux16(a=instruction, b=ALUOut, sel=CInstruction, out=ARegIn);
 
-
     //Store new value in the A Reg if destA or if A instruction
     Or(a=destA, b=AInstruction, out=loadA);
     ARegister(in=ARegIn, load=loadA, out=A, out[0..14]=addressM);  
 
-    //Store ALU out in D Reg if destD and if CInstruction
+    //Store ALU out in D Reg if destD and CInstruction
     And(a=destD, b=CInstruction, out=loadD);
     DRegister(in=ALUOut, load=loadD, out=D);  
 
@@ -82,13 +81,15 @@ CHIP CPU {
     
     //Send D and (A or M) to ALU along with c1, c2, ..., c6
     ALU(x=D, y=AorM,zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=ALUOut, out=outM, zr=zero, ng=neg);
+
+    //Create more variable describing the nature of ALU out with respect to 0
     Not(in=zero, out=notZero); //ALUOut == 0
     Or(a=zero, b=neg, out=zrOrNeg);
     Not(in=neg, out=zrOrPos); //ALUOut >=0
     And(a=zrOrPos, b=notZero, out=pos); //ALUOut >0
 
 
-
+    //Check if any jump cases pass given the nature of ALU out
     And(a=j3, b=pos, out=JGT);
     And(a=j2, b=zero, out=JEQ);
     And(a=j2andj3, b=zrOrPos, out=JGE);
@@ -97,11 +98,16 @@ CHIP CPU {
     And(a=j1andj2, b=zrOrNeg, out=JLE);
     And(a=j1andj2andj3, b=true, out=JMP);
 
+    //If any jump conditions are met, set JumpCondMet=1
     Or8Way(in[0]=JGT, in[1]=JEQ, in[2]=JGE, in[3]=JLT, in[4]=JNE, in[5]=JLE, in[6]=JMP, in[7]=false, out=JumpCondMet);
+
+    //Ignore the jump if the initial instruction was an A instruction
     And(a=CInstruction, b=JumpCondMet, out=Jump);
     
+    //Write new val to M if instruction was a CInstruction and destM == 1 
     And(a=CInstruction, b=destM, out=writeM);
     
+    //Update PC based on Jump, A reg value, and incoming reset bit
     PC(in=A, load=Jump, inc=true, reset=reset, out[0..14]=pc);
 
 
