@@ -1,5 +1,5 @@
 class CCommand
-  COMPS = {
+  @@COMPS = {
     "0" => "0101010",
     "1" => "0111111",
     "-1" => "0111010",
@@ -29,7 +29,7 @@ class CCommand
     "D|A" => "0010101",
     "D|M" => "1010101",
   }
-  DESTS = {
+  @@DESTS = {
     "" => "000",
     "M" => "001",
     "D" => "010",
@@ -39,7 +39,7 @@ class CCommand
     "AD" => "110",
     "AMD" => "111"
   }
-  JUMPS = {
+  @@JUMPS = {
     "" => "000",
     "JGT" => "001",
     "JEQ" => "010",
@@ -55,11 +55,11 @@ class CCommand
     @in_command = command
   end
   
-  def bin_command 
+  def binary_command 
     matches = @in_command.match(COMMAND_REGEX)
-    dest = DESTS[matches[2]]
-    comp = COMPS[matches[3]]
-    jump = JUMPS[matches[5]]
+    dest = @@DESTS[matches[2]]
+    comp = @@COMPS[matches[3]]
+    jump = @@JUMPS[matches[5]]
     dest = "000" if dest == nil
     comp = "0000000" if comp == nil
     jump = "000" if jump == nil
@@ -67,6 +67,3 @@ class CCommand
   end
 
 end
-
-
-

@@ -1,5 +1,4 @@
 class SymbolTable
-  attr_accessor :symbol_table
   def initialize 
     @symbol_table = {
       "SP" => 0,
