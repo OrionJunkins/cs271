@@ -1,0 +1,20 @@
+//Send D and (A or M) to ALU along with c1, c2, ..., c6
+    ALU(x=D, y=AorM,zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=ALUOut, out=outM, zr=zero, ng=neg);
+    Not(in=neg, out=zrOrPos); //ALUOut >=0
+    Not(in=zero, out=notZero); //ALUOut == 0
+    And(a=zrOrPos, b=notZero, out=pos); //ALUOut >0
+
+
+    And(a=j1, b=neg, out=JL);
+    And(a=j3, b=pos, out=JG);
+
+    And(a=j2, b=zero, out=JEQ);
+
+    And(a=j1andj3, b=notZero, out=JNE);
+
+    And(a=j1andj2andj3, b=true, out=JMP);
+
+    Or8Way(in[0]=JL, in[0]=JG, in[0]=JEQ, in[0]=JNE, in[4]=JMP, in[5]=false, in[6]=false, in[7]=false, out=Jump);
+    
+    And(a=ACSpecifier, b=destM, out=writeM);
+    
