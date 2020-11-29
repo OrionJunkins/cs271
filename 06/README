@@ -1,0 +1,20 @@
+Author: Orion Junkins
+Last Edit: 11/28/20
+
+This directory implements the assembler specified in Unit 6 of Nand2Tetris.
+Given one or more .asm files, a corresponding .hack file will be produced.
+This assembler assumes the .asm file is bug free, meeting all language specifications.
+
+To operate:
+- Use Ruby to run assembler.rb, specifying any number of file names
+- For example, to assemble the file Rect.asm in the rect directory, run:
+      "ruby assembler.rb rect/Rect.asm"
+- Rect.hack will be generated in the rect directory.
+- To convert multiple files at once, specify them in sequence.
+- For example, to assemble Rect.asm and Add.asm in their respective directories:
+      "ruby assembler.rb rect/Rect.asm add/Add.asm"
+
+
+
+
+
